@@ -2,6 +2,7 @@
 using BestPractices.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using System.Threading.Tasks;
 
 namespace BestPractices.API.Controllers
 {
@@ -24,9 +25,10 @@ namespace BestPractices.API.Controllers
             return _configuration["ENV"].ToString();
         }
         [HttpGet("{id}")]
-        public ContactDVO GetContactById(int id)
+        [ResponseCache(Duration = 60)]
+        public async Task<ContactDVO> GetContactById(int id)
         {
-            return _contactService.GetContactById(id);
+            return await _contactService.GetContactById(id);
         }
         [HttpPost]
         public ContactDVO CreateContact(ContactDVO contact)

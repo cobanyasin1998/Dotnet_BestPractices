@@ -32,6 +32,13 @@ namespace BestPractices.API
             services.AddTransient<IValidator<ContactDVO>, ContactValidation>();
 
             services.AddScoped<IContactService, ContactService>();
+
+            services.AddHttpClient("garantiApi", config =>
+            {
+                config.BaseAddress = new System.Uri("http://www.garanti.com");
+                config.DefaultRequestHeaders.Add("Authorization", "Bearer 21212");
+
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -43,6 +50,7 @@ namespace BestPractices.API
 
             app.UseCustomHealthCheck();
 
+            app.UseResponseCaching();
 
             app.UseHttpsRedirection();
             app.UseRouting();
