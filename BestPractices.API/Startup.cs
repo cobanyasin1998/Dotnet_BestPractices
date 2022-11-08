@@ -1,16 +1,10 @@
+using BestPractices.Api.Service;
+using BestPractices.API.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BestPractices.API
 {
@@ -23,15 +17,17 @@ namespace BestPractices.API
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
 
             services.AddHealthChecks();
+
+            services.ConfigureMapping();
+            
+            services.AddScoped<IContactService, ContactService>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -39,14 +35,7 @@ namespace BestPractices.API
                 app.UseDeveloperExceptionPage();
             }
 
-
-            app.UseHealthChecks("api/health", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions()
-            {
-                ResponseWriter = async (context, report) =>
-                {
-                    await context.Response.WriteAsync("OK");
-                }
-            });
+            app.UseCustomHealthCheck();
 
             app.UseHttpsRedirection();
             app.UseRouting();
