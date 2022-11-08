@@ -1,5 +1,9 @@
 using BestPractices.Api.Service;
 using BestPractices.API.Extensions;
+using BestPractices.API.Models;
+using BestPractices.API.Validations;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -19,12 +23,14 @@ namespace BestPractices.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().AddFluentValidation(i => i.RunDefaultMvcValidationAfterFluentValidationExecutes = false);
 
             services.AddHealthChecks();
 
             services.ConfigureMapping();
-            
+
+            services.AddTransient<IValidator<ContactDVO>, ContactValidation>();
+
             services.AddScoped<IContactService, ContactService>();
         }
 
@@ -36,6 +42,7 @@ namespace BestPractices.API
             }
 
             app.UseCustomHealthCheck();
+
 
             app.UseHttpsRedirection();
             app.UseRouting();

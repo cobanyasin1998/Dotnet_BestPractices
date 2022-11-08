@@ -28,5 +28,14 @@ namespace BestPractices.API.Controllers
         {
             return _contactService.GetContactById(id);
         }
+        [HttpPost]
+        public ContactDVO CreateContact(ContactDVO contact)
+        {
+
+
+            //Create Contact on DB
+
+            return contact;
+        }
     }
 }
