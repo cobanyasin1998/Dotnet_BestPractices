@@ -1,4 +1,5 @@
 using BestPractices.Api.Service;
+using BestPractices.API.BackgroundServices;
 using BestPractices.API.Extensions;
 using BestPractices.API.Models;
 using BestPractices.API.Validations;
@@ -39,6 +40,8 @@ namespace BestPractices.API
                 config.DefaultRequestHeaders.Add("Authorization", "Bearer 21212");
 
             });
+
+            services.AddHostedService<DateTimeLogWriter>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
